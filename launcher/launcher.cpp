@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <stdio.h>
 #include <sys/stat.h>
 
 #if defined(_WIN32)
@@ -33,6 +34,58 @@ int checkIsSteamRunning(char* appCmdLine)
     directoryBuffer[0] = '\0';
     char Buffer[MAX_PATH];
 
+    /*if (GetCurrentDirectoryA(sizeof(Buffer) * sizeof(char), Buffer))
+    {
+        char* correctPath = strrchr(Buffer, '\\');
+        char directoryPathPtr;
+
+        if (correctPath)
+        {
+            while (true)
+            {
+                correctPath[1] = '\0';
+                strcat(correctPath, "steam_dev.exe");
+                FILE* steamDevExeFile = fopen(correctPath, "rb");
+
+                if (steamDevExeFile)
+                    break;
+
+                correctPath[1] = 0;
+                strcat(correctPath, "steam.exe");
+                FILE* steamExeFile = fopen(correctPath, "rb");
+
+                if (steamExeFile)
+                {
+                    fclose(steamExeFile);
+                    int counter = 0;
+
+                    do
+                    {
+                        directoryPathPtr = Buffer[counter++];
+                        directoryBuffer[counter] = directoryPathPtr;
+                    } while (directoryPathPtr);
+
+                }
+
+            }
+        }
+    }
+    
+
+    if (!directoryBuffer)
+    {
+        if (!RegOpenKeyA(HKEY_CURRENT_USER, "Software\\Valve\\Steam", (PHKEY)data))
+        {
+            DWORD cbData = 260;
+            RegQueryValueExA((HKEY)data, "SteamExe");
+            RegCloseKey(((HKEY)data));
+        }
+        directoryPtr = directoryBuffer;
+        if (!directoryBuffer)
+            return MessageBoxA(NULL, "Error running game: could not find steam.exe to launch", "Fatal Error", )
+    }
+
+    */
     return 0;
 }
 
@@ -61,12 +114,17 @@ bool checkFileSystem(char* cmdLine, const char* libFileName, const char* FileNam
 
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
-	if (checkFileSystem(lpCmdLine, "filesystem_stdio.dll", "filesystem_stdio.dll"))
-		return 0;
+    const char* FsModule = "filesystem_stdio.dll";
+	//if (checkFileSystem(lpCmdLine, FsModule, FsModule))
+		//return 0;
 
     HANDLE mutex = CreateMutexA(NULL, NULL, "ValveHalfLifeLauncher");
     if (mutex)
         GetLastError();
+
+
+
+
 
 
 
