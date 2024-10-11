@@ -118,15 +118,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	//if (checkFileSystem(lpCmdLine, FsModule, FsModule))
 		//return 0;
 
-    HANDLE mutex = CreateMutexA(NULL, NULL, "ValveHalfLifeLauncher");
-    if (mutex)
+    HANDLE mutexHandle = CreateMutexA(NULL, NULL, "ValveHalfLifeLauncherMutex");
+    if (mutexHandle)
         GetLastError();
 
+    DWORD singleObject = WaitForSingleObject(mutexHandle, NULL);
+    if (singleObject && singleObject != WAIT_ABANDONED)
+    {
+        MessageBoxA(NULL, "Could not launch game.\nOnly one instance of this game can be run at a time.", "Error", MB_ICONERROR);
+    }
 
-
-
-
-
+    WSAData wsaData{};
+    WSAStartup(MAKEWORD(2, 2), &wsaData);
 
 	return 0;
 	
